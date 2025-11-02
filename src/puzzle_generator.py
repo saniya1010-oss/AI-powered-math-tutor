@@ -22,24 +22,3 @@ def generate_puzzle(level):
     question = f"{a} {op_symbol} {b}"
     answer = op_func(a, b)
     return question, answer
-import random
-import operator
-
-#OPS = {
-#    'easy': [('+', operator.add), ('-', operator.sub)],
-#    'medium': [('*', operator.mul)],
-#    'hard': [('/', operator.floordiv)]
-#}
-
-#def generate_puzzle(level):
-#    op_symbol, op_func = random.choice(OPS[level])
-#    if level == 'easy':
-#        a, b = random.randint(1, 10), random.randint(1, 10)
-#    elif level == 'medium':
-#        a, b = random.randint(10, 50), random.randint(2, 10)
-#    else:
-#        a, b = random.randint(20, 100), random.randint(2, 10)
-#        a = a * b  # ensure division has integer result
-#    question = f"{a} {op_symbol} {b}"
-#    answer = op_func(a, b)
-#    return question, answer
