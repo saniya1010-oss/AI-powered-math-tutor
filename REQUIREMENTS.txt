@@ -1,1 +1,7 @@
-empty
+Pandas - Python library used for data analysis and manipulation. Used in the repository to create synthetic data to train the model and create summary dataframe. 
+Numpy - Python library used for numerical computing. Used in the repository to create math problems in the puzzle generator.
+streamlit- Python library for building interactive webapps using only python.
+time - Python module to represent time in code in many ways. Used in the repository to calculate time taken by the user to solve a problem.
+random - Python module to add randomness. Used in the repository to generate random math problems in the puzzle generator.
+operator - Python module for the built-in, particulary used to fetch answers of the user.
+scikit learn - Python library for machine learning. Used in the repository to load and train logistic regression model.
