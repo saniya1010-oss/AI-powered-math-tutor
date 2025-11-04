@@ -74,10 +74,11 @@ if st.button('Submit'):
         st.session_state.question, st.session_state.answer = generate_puzzle(st.session_state.difficulty)
         st.session_state.start_time = time.time()
 
-if st.button ('Show Summary')
+if st.button ('Show Summary'):
     st.write(f"**Name:** {st.session_state.name}")
     st.write(st.session_state.tracker.get_dataframe())
     st.write(st.session_state.tracker.summary())
+
 
 
 
