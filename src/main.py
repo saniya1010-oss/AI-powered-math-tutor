@@ -4,98 +4,85 @@ from puzzle_generator import generate_puzzle
 from tracker import PerformanceTracker
 from adaptive_engine import AdaptiveEngine
 
-#fixing the UI for header and buttons
-st.title("🧠 Bingo: Your Math Tutor") #, unsafe_allow_html = True)
+#--Basic UI Styling--
 
+st.title('🧠 Bingo: Your Math Tutor 🧠')
 st.markdown('''
     <style>
-        /* General page background & alignment */
-        .main {
-            text-align: centre;
-        }
-        /* Title styling */
         h1 {
-            color: black !important;
+            color: white !important;
             font-weight: 800 !important;
-            font-size: 3em !important;
-        }
-            
-        /* Subtitle (Current Level etc.) */
-        h3, h4 {
-            color: black !important;
-            font-weight: 600 !important;
-            font-size: 1.5em !important;
-        }
-        /* Text input */
-        -stTextInput > div > div > input {
+            font-size: 2.8em !important;
             text-align: center;
-            font-size: 1.2em;
+        }
+        h3, h4, p, label {
+            color: white !important;
+            font-weight: 600 !important;
+            text-align: center;
+        }
+        .stTextInput > div > div > input {
+            text-align: center;
+            font-size: 1.1em;
             font-weight: 500;
         }
-        /* Buttons */
-        .stButtons > button {
-            background-color: #333;
-            color: black !important;
-            font-size: 1em;
-            border-radius: 8px;
-            padding: 10px 24px;
-            font-weight: bold;
-        }
-            .stButton > button:hover{
-            background-color: #555;
-            color: #f0f0f0;
+        .stButton > button:hover {
+            background-color: #444;
+            color: #fff;
         }
     </style>
-''', unsafe_allow_html=True)
+''', unsafe_allow_html = True)
 
-# adding background
-page_bg = '''
-<style>
-[data-testid= "stAppViewContainer"] {
-    background-image: url("https://i.pinimg.com/736x/16/85/ca/1685ca63601d68b5729b7b215a5021c7.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    color: white !important;
-}
-[data-testid="stHeader"] {
-    background: rgba(0,0,0,0);
-}
-[data-testid="stSidebar"] {
-    background-color: rgba(255,255,255,0.8);
-}
-</style>
-'''
-st.markdown(page_bg, unsafe_allow_html=True)
-
+if 'name' not in st.session_state:
+    st.session_state.name = ''
 if 'tracker' not in st.session_state:
     st.session_state.tracker = PerformanceTracker()
 if 'engine' not in st.session_state:
     st.session_state.engine = AdaptiveEngine()
 if 'difficulty' not in st.session_state:
-    st.session_state.difficulty = st.selectbox("Choose starting level:", ['easy', 'medium', 'hard', 'extreme'])
+    st.session_state.difficulty = 'easy'
 if 'start_time' not in st.session_state:
-    st.session_state.start_time = None
+    st.session_state.start_time = 'None'
+if 'question' not in st.session_state or 'answer' not in st.session_state:
+    st.session_state.question, st.session_state.answer = generate_puzzle(st.session_state.difficulty)
 
-st.subheader(f"Current Level: {st.session_state.difficulty.capitalize()}")
-question, answer = generate_puzzle(st.session_state.difficulty)
-st.write(f"**Solve:** {question}")
+# ---Name Input and Quiz---
+st.session_state.name = st.text_input('Enter your name:', st.session_state.name)
+st.markdown(f"<h4>Current Level: {st.session_state.difficulty.capitalize()}<h4>", unsafe_allow_html=True)
+st.markdown(f"<h4 style='color:black;'> Solve: {st.session_state.question} <h4>", unsafe_allow_html=True)
 
-user_answer = st.text_input("Your answer:")
-if st.button("Submit"):
-    start = time.time() if st.session_state.start_time is None else st.session_state.start_time
-    correct = str(user_answer).strip() == str(answer)
-    response_time = round(time.time() - start, 2)
-    st.session_state.tracker.log_attempt(question, correct, response_time, st.session_state.difficulty)
-    stats = st.session_state.tracker.summary()
+# ---Collect User Response--
+user_answer  = st.text_input('Type Your Answer:')
 
-    if stats:
-        next_diff = st.session_state.engine.predict_next_level(stats['accuracy'], stats['avg_time'])
-        st.session_state.difficulty = next_diff
-        st.success(f"✅ {'Correct!' if correct else '❌ Wrong.'} Next level: {next_diff.capitalize()}")
-    st.session_state.start_time = time.time()
+if st.button('Submit'):
+    if not st.session_state.name.strip():
+        st.warning('Please enter your name before starting!!')
+    else:
+        start = st.session_state.start_time or time.time()
+        response_time = round(time.time() - start, 2)
+        correct = str(user_answer).strip() == str(st.session_state.answer)
 
-if st.button("Show Summary"):
+        st.session_state.tracker.log_attempt(
+            st.session_state.question, correct, response_time, st.session.difficulty
+        )
+
+        stats = st.session_state.tracker.summary()
+        if stats:
+            next_diff = st.session_state.engine.predict_next_level(stats['accuracy'], stats ['avg_time'])
+            st.success(f"{'✔️ Correct! Please press show summary to move to the next question' if correct else '❌ Oops!! Try again.. Please press show summary to move to  the next summary'} Next level: {next_diff.capitalize()}")
+
+        # ---Generate New Question---
+        st.session_state.question, st.session_state.answer = generate_puzzle(st.session_state.difficulty)
+        st.session_state.start_time = time.time()
+
+if st.button ('Show Summary')
+    st.write(f"**Name:** {st.session_state.name}")
     st.write(st.session_state.tracker.get_dataframe())
     st.write(st.session_state.tracker.summary())
+
+
+
+
+
+
+
 
