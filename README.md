@@ -16,8 +16,10 @@ Bingo is an adaptive math learning prototype built with **Streamlit**. It dynami
    python -m streamlit run src/main.py
    ```
 
-   ### Tech Stack
+### Tech Stack
 
-   **Frontend:** Streamlit
-   **Backend:** Python
-   **Model Used:** Logistic Regression
+**Frontend:** Streamlit
+
+**Backend:** Python
+
+**Model Used:** Logistic Regression
