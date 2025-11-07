@@ -1,3 +1,5 @@
+# Author: Saniya | For evaluation purposes only | © 2025
+
 import streamlit as st
 import time
 from puzzle_generator import generate_puzzle
@@ -86,3 +88,4 @@ if st.button("Show Summary"):
     st.write(f"**Name:** {st.session_state.name}")
     st.write(st.session_state.tracker.get_dataframe())
     st.write(st.session_state.tracker.summary())
+
