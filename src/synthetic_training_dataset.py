@@ -1,27 +1,39 @@
 import numpy as np
 import pandas as pd
+#specify number of players
 
-# number of players
-n = 1000 #adjustable
-accuracy = np.random.normal(70, 15, n).clip(0, 100)
-avg_time = np.random.normal(8, 3, n).clip(1, 20)
+num_players = 50000
+accuracy = np.clip(
+    np.random.normal(50, 25, num_players),
+    0, None
+) #gaussian distribution with mean 50, and std 25
+avg_time = np.clip(
+    np.random.normal(30, 15, num_players),
+    0, None)
 
-# ---Hierarchy of Difficulty Levels---
-difficulty = np.where(
-    (accuracy > 90) & (avg_time < 5), 3, #extreme
+#specify difficulty levels
+diff = np.where(
+    (accuracy >= 75) & (avg_time < 15), 'extreme',
     np.where(
-        (accuracy > 85) & (avg_time < 10), 2,  # hard
-            np.where((accuracy > 60) & (avg_time < 20), 1,  # medium
-                    0 #easy
+        (accuracy >=70) & (avg_time < 25), 'hard',
+        np.where(
+            (accuracy >= 60) & (avg_time < 35), 'medium',
+            np.where(
+                (accuracy >= 45) & (avg_time < 40), 'normal',
+                'easy'
             )
         )
     )
+)
 
 df = pd.DataFrame({
-    'accuracy': accuracy,
-    'avg_time': avg_time,
-    'difficulty': difficulty
+    'Accuracy' : accuracy,
+    'Time Taken' : avg_time,
+    'Difficulty Level' : diff
 })
 
 def get_dataset():
     return df
+
+data = get_dataset()
+print(f'Number of difficulty levels {data['Difficulty Level'].value_counts()}')
